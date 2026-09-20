@@ -1,5 +1,3 @@
-FROM eceasy/cli-proxy-api-business:latest AS web-assets
-
 FROM golang:1.26-alpine AS builder
 
 WORKDIR /app
@@ -11,7 +9,9 @@ RUN go mod download
 
 COPY . .
 
-COPY --from=web-assets /CLIProxyAPIBusiness/web/dist internal/webui/dist
+RUN mkdir -p internal/webui/dist/assets && \
+    printf '<!doctype html><html><head><meta charset="utf-8"><title>CPAB</title></head><body><h1>CLIProxyAPIBusiness v7</h1><p>API-only deployment. Use API endpoints directly.</p></body></html>' > internal/webui/dist/index.html && \
+    printf '/* placeholder */' > internal/webui/dist/assets/app.js
 
 RUN CGO_ENABLED=0 go build -trimpath \
     -ldflags "-s -w -X main.Version=v7-sdk -X main.Commit=$(git rev-parse --short HEAD 2>/dev/null || echo unknown) -X main.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
