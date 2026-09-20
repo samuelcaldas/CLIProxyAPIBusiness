@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	sdkapi "github.com/router-for-me/CLIProxyAPI/v6/sdk/api"
-	sdkhandlers "github.com/router-for-me/CLIProxyAPI/v6/sdk/api/handlers"
-	sdkconfig "github.com/router-for-me/CLIProxyAPI/v6/sdk/config"
+	sdkapi "github.com/router-for-me/CLIProxyAPI/v7/sdk/api"
+	sdkhandlers "github.com/router-for-me/CLIProxyAPI/v7/sdk/api/handlers"
+	sdkconfig "github.com/router-for-me/CLIProxyAPI/v7/sdk/config"
 	"github.com/router-for-me/CLIProxyAPIBusiness/internal/config"
 	handlers "github.com/router-for-me/CLIProxyAPIBusiness/internal/http/api/admin/handlers"
 	"github.com/router-for-me/CLIProxyAPIBusiness/internal/http/api/admin/permissions"
@@ -216,12 +216,9 @@ func RegisterAdminRoutes(r *gin.Engine, db *gorm.DB, jwtCfg config.JWTConfig, co
 	if baseHandler != nil && baseHandler.AuthManager != nil {
 		tokenRequester := sdkapi.NewManagementTokenRequester(cfg, baseHandler.AuthManager)
 		authed.POST("/tokens/anthropic", tokenRequester.RequestAnthropicToken)
-		authed.POST("/tokens/gemini", tokenRequester.RequestGeminiCLIToken)
 		authed.POST("/tokens/codex", tokenRequester.RequestCodexToken)
 		authed.POST("/tokens/antigravity", tokenRequester.RequestAntigravityToken)
-		authed.POST("/tokens/qwen", tokenRequester.RequestQwenToken)
-		authed.POST("/tokens/iflow", tokenRequester.RequestIFlowToken)
-		authed.POST("/tokens/iflow-cookie", tokenRequester.RequestIFlowCookieToken)
+		authed.POST("/tokens/kimi", tokenRequester.RequestKimiToken)
 		authed.POST("/tokens/get-auth-status", tokenRequester.GetAuthStatus)
 		authed.POST("/tokens/oauth-callback", tokenRequester.PostOAuthCallback)
 	}
